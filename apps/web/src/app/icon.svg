@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#204d49" />
+      <stop offset="1" stop-color="#102d2c" />
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="9" />
+    </filter>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="url(#bg)" />
+  <circle cx="126" cy="128" r="82" fill="#9ce8ce" opacity=".17" filter="url(#glow)" />
+  <rect
+    x="17"
+    y="17"
+    width="222"
+    height="222"
+    rx="46"
+    fill="none"
+    stroke="#b9f1dc"
+    stroke-opacity=".22"
+    stroke-width="2"
+  />
+  <path
+    fill="#e8f4ed"
+    fill-rule="evenodd"
+    d="M58 38h61c59 0 91 34 91 90s-32 90-91 90H58V38zm45 42v96h15c31 0 47-16 47-48s-16-48-47-48h-15z"
+  />
+  <circle cx="205" cy="196" r="13" fill="#efbd68" />
+</svg>
