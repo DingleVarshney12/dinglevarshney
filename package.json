@@ -1,0 +1,22 @@
+{
+  "name": "dinglevarshney",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @dinglevarshney/web --filter @dinglevarshney/api dev",
+    "dev:web": "pnpm --filter @dinglevarshney/web dev",
+    "dev:api": "pnpm --filter @dinglevarshney/api start:dev",
+    "build": "pnpm -r --workspace-concurrency=1 build",
+    "check": "pnpm lint && pnpm typecheck && pnpm build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "pnpm -r --workspace-concurrency=1 lint",
+    "typecheck": "pnpm -r --workspace-concurrency=1 typecheck"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.10"
+  }
+}
