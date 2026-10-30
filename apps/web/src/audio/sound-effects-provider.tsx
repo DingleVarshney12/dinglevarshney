@@ -138,6 +138,7 @@ export function SoundEffectsProvider({ children }: { children: ReactNode }) {
         setEnabled(false);
       }
     } catch {
+      return;
     }
   }, []);
 
@@ -147,6 +148,7 @@ export function SoundEffectsProvider({ children }: { children: ReactNode }) {
       engineRef.current ??= new SoundEngine();
       engineRef.current.play(effect);
     } catch {
+      engineRef.current = null;
     }
   }, []);
 
@@ -157,6 +159,7 @@ export function SoundEffectsProvider({ children }: { children: ReactNode }) {
     try {
       window.localStorage.setItem(STORAGE_KEY, String(next));
     } catch {
+      setEnabled(next);
     }
     if (next) play("toggle");
   }, [play]);
