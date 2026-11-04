@@ -436,8 +436,19 @@ export function ClassicExperience({
                       {skills.map((skill) => (
                         <span
                           key={skill.id}
-                          className="rounded-full bg-[#edf5f1] px-3 py-1.5 text-sm font-semibold text-[#285d50]"
+                          className="inline-flex items-center gap-2 rounded-full bg-[#edf5f1] px-3 py-1.5 text-sm font-semibold text-[#285d50]"
                         >
+                          {skill.iconUrl && (
+                            <img
+                              src={skill.iconUrl}
+                              alt=""
+                              className="size-5 object-contain"
+                              loading="lazy"
+                              onError={(event) => {
+                                event.currentTarget.hidden = true;
+                              }}
+                            />
+                          )}
                           {skill.name}
                         </span>
                       ))}

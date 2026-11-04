@@ -1,4 +1,13 @@
-import { IsBoolean, IsIn, IsISO8601, IsOptional, IsString, IsUUID, MaxLength, Matches } from "class-validator";
+import {
+  IsBoolean,
+  IsIn,
+  IsISO8601,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  Matches,
+} from "class-validator";
 
 export class SaveCelebrationDto {
   @IsOptional()
@@ -30,5 +39,4 @@ export class SaveCelebrationDto {
 
   @IsBoolean()
   isEnabled!: boolean;
-
 }

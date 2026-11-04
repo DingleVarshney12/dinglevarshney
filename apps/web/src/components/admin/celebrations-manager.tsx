@@ -2,16 +2,38 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { Plus, Save, Trash2 } from "lucide-react";
-import { deleteCelebration, getCelebrations, saveCelebration } from "@/api/celebration/celebration.api";
+import {
+  deleteCelebration,
+  getCelebrations,
+  saveCelebration,
+} from "@/api/celebration/celebration.api";
 import type { CelebrationConfig, CelebrationEffect } from "@/api/celebration/celebration.type";
 import { getAdminAccessToken } from "@/lib/supabase/get-admin-access-token";
 
 type Draft = Omit<CelebrationConfig, "id"> & { id?: string };
-const freshDraft = (): Draft => ({ name: "", message: "", effect: "coins", accentColor: "#efbd68", startsAt: "", endsAt: "", yearly: true, isEnabled: true });
-const effects: { value: CelebrationEffect; label: string }[] = [{ value: "coins", label: "Falling coins" }, { value: "petals", label: "Falling petals" }, { value: "confetti", label: "Confetti" }, { value: "lights", label: "Festival lights" }];
-const field = "mt-1.5 w-full rounded-xl border border-[#d7d5ca] bg-white px-3 py-2.5 outline-none focus:border-[#2a6355]";
+const freshDraft = (): Draft => ({
+  name: "",
+  message: "",
+  effect: "coins",
+  accentColor: "#efbd68",
+  startsAt: "",
+  endsAt: "",
+  yearly: true,
+  isEnabled: true,
+});
+const effects: { value: CelebrationEffect; label: string }[] = [
+  { value: "coins", label: "Falling coins" },
+  { value: "petals", label: "Falling petals" },
+  { value: "confetti", label: "Confetti" },
+  { value: "lights", label: "Festival lights" },
+];
+const field =
+  "mt-1.5 w-full rounded-xl border border-[#d7d5ca] bg-white px-3 py-2.5 outline-none focus:border-[#2a6355]";
 const dateValue = (value: string) => new Date(value).toISOString();
-const localDate = (value: string) => { const date = new Date(value); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16); };
+const localDate = (value: string) => {
+  const date = new Date(value);
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+};
 
 export function CelebrationsManager() {
   const [items, setItems] = useState<CelebrationConfig[]>([]);
@@ -19,12 +41,222 @@ export function CelebrationsManager() {
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  useEffect(() => { let alive = true; void getAdminAccessToken().then(async (access) => { const data = await getCelebrations(access); if (alive) { setToken(access); setItems(data); } }).catch((e: unknown) => { if (alive) setError(e instanceof Error ? e.message : "Could not load occasions."); }); return () => { alive = false; }; }, []);
-  async function submit(event: FormEvent) { event.preventDefault(); if (!draft || !token) return; try { const saved = await saveCelebration({ ...draft, startsAt: dateValue(draft.startsAt), endsAt: dateValue(draft.endsAt) }, token); setItems((current) => [saved, ...current.filter((item) => item.id !== saved.id)]); setDraft(null); setNotice("Occasion saved."); setError(""); } catch (e) { setError(e instanceof Error ? e.message : "Could not save occasion."); } }
-  async function remove(id: string) { try { await deleteCelebration(id, token); setItems((current) => current.filter((item) => item.id !== id)); } catch (e) { setError(e instanceof Error ? e.message : "Could not delete occasion."); } }
-  return <section className="mt-10 rounded-3xl border border-[#ded6c7] bg-[#fffdf8] p-5 sm:p-8"><div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-[#2a6355]">Special moments</p><h2 className="mt-2 font-serif text-2xl text-[#263432]">Celebration overlays</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#68736c]">Set up your birthday, New Year, Diwali, Holi, or any occasion. Pick its dates, message, and animation.</p></div><button type="button" onClick={() => { setDraft(freshDraft()); setError(""); }} className="inline-flex items-center gap-2 rounded-full bg-[#204d49] px-4 py-2.5 text-sm font-semibold text-white"><Plus size={16}/> Add occasion</button></div>
-  {notice && <p role="status" className="mt-4 text-sm text-emerald-800">{notice}</p>}{error && <p role="alert" className="mt-4 text-sm text-rose-700">{error}</p>}
-  {draft && <form onSubmit={(event) => void submit(event)} className="mt-6 grid gap-4 rounded-2xl border border-[#e3dccd] bg-white p-4 sm:grid-cols-2 sm:p-6"><label className="text-sm font-semibold">Occasion<input required maxLength={80} className={field} value={draft.name} onChange={(e) => setDraft({...draft,name:e.target.value})} placeholder="Dhanteras"/></label><label className="text-sm font-semibold">Wish message<input required maxLength={180} className={field} value={draft.message} onChange={(e) => setDraft({...draft,message:e.target.value})} placeholder="Happy Dhanteras!"/></label><label className="text-sm font-semibold">Animation<select className={field} value={draft.effect} onChange={(e) => setDraft({...draft,effect:e.target.value as CelebrationEffect})}>{effects.map((effect)=><option key={effect.value} value={effect.value}>{effect.label}</option>)}</select></label><label className="text-sm font-semibold">Accent color<input type="color" className={`${field} h-11 p-1`} value={draft.accentColor} onChange={(e)=>setDraft({...draft,accentColor:e.target.value})}/></label><label className="text-sm font-semibold">Starts<input required type="datetime-local" className={field} value={draft.startsAt} onChange={(e)=>setDraft({...draft,startsAt:e.target.value})}/></label><label className="text-sm font-semibold">Ends<input required type="datetime-local" className={field} value={draft.endsAt} onChange={(e)=>setDraft({...draft,endsAt:e.target.value})}/></label><label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={draft.yearly} onChange={(e)=>setDraft({...draft,yearly:e.target.checked})}/> Repeat yearly (birthday and annual festivals)</label><label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={draft.isEnabled} onChange={(e)=>setDraft({...draft,isEnabled:e.target.checked})}/> Occasion enabled</label><div className="flex gap-3 sm:col-span-2"><button className="inline-flex items-center gap-2 rounded-full bg-[#204d49] px-5 py-2.5 text-sm font-semibold text-white"><Save size={16}/> Save occasion</button><button type="button" onClick={()=>setDraft(null)} className="rounded-full border px-5 py-2.5 text-sm">Cancel</button></div></form>}
-  <div className="mt-6 grid gap-3 sm:grid-cols-2">{items.map((item)=><article key={item.id} className="flex items-start justify-between gap-3 rounded-2xl border border-[#e3dccd] bg-white p-4"><div><h3 className="font-semibold text-[#263432]">{item.name}</h3><p className="mt-1 text-sm text-[#68736c]">{item.message}</p><p className="mt-2 text-xs text-[#68736c]">{effects.find((effect)=>effect.value===item.effect)?.label} · {item.yearly?"Repeats yearly":"One time"} · {item.isEnabled?"Enabled":"Paused"}</p></div><div className="flex gap-1"><button type="button" onClick={()=>setDraft({...item,startsAt:localDate(item.startsAt),endsAt:localDate(item.endsAt)})} className="rounded-lg px-3 py-2 text-xs font-semibold text-[#2a6355] hover:bg-[#e7f0e9]">Edit</button><button type="button" onClick={()=>void remove(item.id)} aria-label={`Delete ${item.name}`} className="rounded-lg p-2 text-rose-700 hover:bg-rose-50"><Trash2 size={15}/></button></div></article>)}</div></section>;
+  useEffect(() => {
+    let alive = true;
+    void getAdminAccessToken()
+      .then(async (access) => {
+        const data = await getCelebrations(access);
+        if (alive) {
+          setToken(access);
+          setItems(data);
+        }
+      })
+      .catch((e: unknown) => {
+        if (alive) setError(e instanceof Error ? e.message : "Could not load occasions.");
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    if (!draft || !token) return;
+    try {
+      const saved = await saveCelebration(
+        { ...draft, startsAt: dateValue(draft.startsAt), endsAt: dateValue(draft.endsAt) },
+        token,
+      );
+      setItems((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
+      setDraft(null);
+      setNotice("Occasion saved.");
+      setError("");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not save occasion.");
+    }
+  }
+  async function remove(id: string) {
+    try {
+      await deleteCelebration(id, token);
+      setItems((current) => current.filter((item) => item.id !== id));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not delete occasion.");
+    }
+  }
+  return (
+    <section className="mt-10 rounded-3xl border border-[#ded6c7] bg-[#fffdf8] p-5 sm:p-8">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[.18em] text-[#2a6355]">
+            Special moments
+          </p>
+          <h2 className="mt-2 font-serif text-2xl text-[#263432]">Celebration overlays</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#68736c]">
+            Set up your birthday, New Year, Diwali, Holi, or any occasion. Pick its dates, message,
+            and animation.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setDraft(freshDraft());
+            setError("");
+          }}
+          className="inline-flex items-center gap-2 rounded-full bg-[#204d49] px-4 py-2.5 text-sm font-semibold text-white"
+        >
+          <Plus size={16} /> Add occasion
+        </button>
+      </div>
+      {notice && (
+        <p role="status" className="mt-4 text-sm text-emerald-800">
+          {notice}
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="mt-4 text-sm text-rose-700">
+          {error}
+        </p>
+      )}
+      {draft && (
+        <form
+          onSubmit={(event) => void submit(event)}
+          className="mt-6 grid gap-4 rounded-2xl border border-[#e3dccd] bg-white p-4 sm:grid-cols-2 sm:p-6"
+        >
+          <label className="text-sm font-semibold">
+            Occasion
+            <input
+              required
+              maxLength={80}
+              className={field}
+              value={draft.name}
+              onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+              placeholder="Dhanteras"
+            />
+          </label>
+          <label className="text-sm font-semibold">
+            Wish message
+            <input
+              required
+              maxLength={180}
+              className={field}
+              value={draft.message}
+              onChange={(e) => setDraft({ ...draft, message: e.target.value })}
+              placeholder="Happy Dhanteras!"
+            />
+          </label>
+          <label className="text-sm font-semibold">
+            Animation
+            <select
+              className={field}
+              value={draft.effect}
+              onChange={(e) => setDraft({ ...draft, effect: e.target.value as CelebrationEffect })}
+            >
+              {effects.map((effect) => (
+                <option key={effect.value} value={effect.value}>
+                  {effect.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-sm font-semibold">
+            Accent color
+            <input
+              type="color"
+              className={`${field} h-11 p-1`}
+              value={draft.accentColor}
+              onChange={(e) => setDraft({ ...draft, accentColor: e.target.value })}
+            />
+          </label>
+          <label className="text-sm font-semibold">
+            Starts
+            <input
+              required
+              type="datetime-local"
+              className={field}
+              value={draft.startsAt}
+              onChange={(e) => setDraft({ ...draft, startsAt: e.target.value })}
+            />
+          </label>
+          <label className="text-sm font-semibold">
+            Ends
+            <input
+              required
+              type="datetime-local"
+              className={field}
+              value={draft.endsAt}
+              onChange={(e) => setDraft({ ...draft, endsAt: e.target.value })}
+            />
+          </label>
+          <label className="flex items-center gap-2 text-sm font-semibold">
+            <input
+              type="checkbox"
+              checked={draft.yearly}
+              onChange={(e) => setDraft({ ...draft, yearly: e.target.checked })}
+            />{" "}
+            Repeat yearly (birthday and annual festivals)
+          </label>
+          <label className="flex items-center gap-2 text-sm font-semibold">
+            <input
+              type="checkbox"
+              checked={draft.isEnabled}
+              onChange={(e) => setDraft({ ...draft, isEnabled: e.target.checked })}
+            />{" "}
+            Occasion enabled
+          </label>
+          <div className="flex gap-3 sm:col-span-2">
+            <button className="inline-flex items-center gap-2 rounded-full bg-[#204d49] px-5 py-2.5 text-sm font-semibold text-white">
+              <Save size={16} /> Save occasion
+            </button>
+            <button
+              type="button"
+              onClick={() => setDraft(null)}
+              className="rounded-full border px-5 py-2.5 text-sm"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        {items.map((item) => (
+          <article
+            key={item.id}
+            className="flex items-start justify-between gap-3 rounded-2xl border border-[#e3dccd] bg-white p-4"
+          >
+            <div>
+              <h3 className="font-semibold text-[#263432]">{item.name}</h3>
+              <p className="mt-1 text-sm text-[#68736c]">{item.message}</p>
+              <p className="mt-2 text-xs text-[#68736c]">
+                {effects.find((effect) => effect.value === item.effect)?.label} ·{" "}
+                {item.yearly ? "Repeats yearly" : "One time"} ·{" "}
+                {item.isEnabled ? "Enabled" : "Paused"}
+              </p>
+            </div>
+            <div className="flex gap-1">
+              <button
+                type="button"
+                onClick={() =>
+                  setDraft({
+                    ...item,
+                    startsAt: localDate(item.startsAt),
+                    endsAt: localDate(item.endsAt),
+                  })
+                }
+                className="rounded-lg px-3 py-2 text-xs font-semibold text-[#2a6355] hover:bg-[#e7f0e9]"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => void remove(item.id)}
+                aria-label={`Delete ${item.name}`}
+                className="rounded-lg p-2 text-rose-700 hover:bg-rose-50"
+              >
+                <Trash2 size={15} />
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
-

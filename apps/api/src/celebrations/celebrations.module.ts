@@ -6,5 +6,9 @@ import { CelebrationRepository } from "./repository/celebration.repository.js";
 import { CelebrationsController } from "./celebrations.controller.js";
 import { CelebrationsService } from "./celebrations.service.js";
 
-@Module({ imports: [TypeOrmModule.forFeature([CelebrationEntity])], controllers: [CelebrationsController], providers: [CelebrationsService, CelebrationRepository, SupabaseAdminGuard] })
+@Module({
+  imports: [TypeOrmModule.forFeature([CelebrationEntity])],
+  controllers: [CelebrationsController],
+  providers: [CelebrationsService, CelebrationRepository, SupabaseAdminGuard],
+})
 export class CelebrationsModule {}

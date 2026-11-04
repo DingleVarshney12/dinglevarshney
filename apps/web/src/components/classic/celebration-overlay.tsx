@@ -29,7 +29,11 @@ export function CelebrationOverlay({ celebration }: { celebration: CelebrationCo
           }}
           aria-hidden="true"
         >
-          {celebration.effect === "coins" ? ( <Coins size={27} strokeWidth={2.6} fill={`${celebration.accentColor}55`} /> ) : ( symbols[celebration.effect][index % symbols[celebration.effect].length] )}
+          {celebration.effect === "coins" ? (
+            <Coins size={27} strokeWidth={2.6} fill={`${celebration.accentColor}55`} />
+          ) : (
+            symbols[celebration.effect][index % symbols[celebration.effect].length]
+          )}
         </span>
       ))}
       <div className="pointer-events-auto absolute left-1/2 top-5 flex w-[min(92vw,560px)] -translate-x-1/2 items-center gap-4 rounded-2xl border border-white/70 bg-[#102d2c]/95 px-5 py-4 text-white shadow-2xl backdrop-blur-md sm:top-8 sm:px-7 sm:py-5">
@@ -79,6 +83,3 @@ export function CelebrationOverlay({ celebration }: { celebration: CelebrationCo
     </div>
   );
 }
-
-
-

@@ -243,6 +243,19 @@ export function SkillsManager() {
               placeholder="Optional"
               className={inputClass}
             />
+            {draft.iconUrl && (
+              <span className="mt-2 inline-flex items-center gap-2 rounded-xl border border-[#e3dccd] bg-white px-3 py-2 text-xs text-[#68736c]">
+                <img
+                  src={draft.iconUrl}
+                  alt=""
+                  className="size-6 object-contain"
+                  onError={(event) => {
+                    event.currentTarget.hidden = true;
+                  }}
+                />
+                Icon preview
+              </span>
+            )}
           </label>
           <label className="text-sm font-semibold text-[#34413d]">
             Display order
@@ -316,6 +329,17 @@ export function SkillsManager() {
                     key={skill.id}
                     className="inline-flex items-center gap-1.5 rounded-full border border-[#e3e5df] bg-[#fbfcf9] py-1 pl-3 pr-1.5"
                   >
+                    {skill.iconUrl && (
+                      <img
+                        src={skill.iconUrl}
+                        alt=""
+                        className="size-5 object-contain"
+                        loading="lazy"
+                        onError={(event) => {
+                          event.currentTarget.hidden = true;
+                        }}
+                      />
+                    )}
                     <span className="text-sm font-semibold text-[#263432]">{skill.name}</span>
                     {!skill.isPublished && (
                       <span className="rounded-full bg-[#f2ecdc] px-1.5 py-0.5 text-[9px] font-bold text-[#756744]">

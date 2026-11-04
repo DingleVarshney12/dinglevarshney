@@ -85,8 +85,20 @@ const adminSections = [
     icon: MessagesSquare,
     status: "Ready",
   },
-  { key: "celebrations", title: "Celebrations", description: "Schedule birthday, festival, and custom wishes with animated effects.", icon: PartyPopper, status: "Ready" },
-  { key: "notice", title: "Notice banner", description: "Publish a short announcement and link below the portfolio navigation.", icon: Megaphone, status: "Ready" },
+  {
+    key: "celebrations",
+    title: "Celebrations",
+    description: "Schedule birthday, festival, and custom wishes with animated effects.",
+    icon: PartyPopper,
+    status: "Ready",
+  },
+  {
+    key: "notice",
+    title: "Notice banner",
+    description: "Publish a short announcement and link below the portfolio navigation.",
+    icon: Megaphone,
+    status: "Ready",
+  },
 ] as const;
 
 export function AdminDashboard({ email }: { email: string }) {
