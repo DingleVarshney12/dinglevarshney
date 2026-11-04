@@ -17,6 +17,7 @@ import { LEETCODE_PROFILE_URL } from "@/api/leetcode/leetcode.api";
 import { downloadResumePdf, generateResumePdf } from "@/features/resume/generate-resume-pdf";
 import { SoundToggle } from "../ui/sound-toggle";
 import { CountUpNumber } from "../ui/count-up-number";
+import { CelebrationOverlay } from "./celebration-overlay";
 import {
   CertificateGridSkeleton,
   ContactDetailsSkeleton,
@@ -99,6 +100,7 @@ export function ClassicExperience({
       ref={revealRootRef}
       className="portfolio-cursor min-h-screen overflow-x-clip bg-[#f7f7f2] text-[#17272b]"
     >
+      <CelebrationOverlay celebration={data.celebration} />
       <ScrollProgress />
       {!loading && (
         <PortfolioLoadNotice
@@ -149,6 +151,25 @@ export function ClassicExperience({
           </span>
         </nav>
       </header>
+      {data.noticeBanner?.isEnabled && data.noticeBanner.text && (
+        <aside
+          className="flex min-h-10 w-full items-center justify-center gap-3 px-4 py-2 text-center text-xs font-semibold text-white sm:text-sm"
+          style={{ backgroundColor: data.noticeBanner.backgroundColor }}
+          aria-label="Announcement"
+        >
+          <span>{data.noticeBanner.text}</span>
+          {data.noticeBanner.linkLabel && data.noticeBanner.linkUrl && (
+            <a
+              href={data.noticeBanner.linkUrl}
+              target={data.noticeBanner.linkUrl.startsWith("http") ? "_blank" : undefined}
+              rel={data.noticeBanner.linkUrl.startsWith("http") ? "noreferrer" : undefined}
+              className="shrink-0 underline underline-offset-4"
+            >
+              {data.noticeBanner.linkLabel} ↗
+            </a>
+          )}
+        </aside>
+      )}
       <section
         id="classic-home"
         className="mx-auto grid max-w-7xl items-center gap-10 px-5 pb-20 pt-12 sm:px-8 md:grid-cols-[1fr_.95fr] lg:gap-14 lg:px-12 lg:pb-24 lg:pt-16"

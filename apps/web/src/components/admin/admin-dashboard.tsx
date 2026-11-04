@@ -12,6 +12,8 @@ import {
   Sparkles,
   Inbox,
   FileText,
+  PartyPopper,
+  Megaphone,
 } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { AboutChaptersManager } from "./about-chapters-manager";
@@ -22,6 +24,8 @@ import { CertificatesManager } from "./certificates-manager";
 import { MascotDialoguesManager } from "./mascot-dialogues-manager";
 import { ContactInbox } from "./contact-inbox";
 import { ResumeContentManager } from "./resume-content-manager";
+import { CelebrationsManager } from "./celebrations-manager";
+import { NoticeBannerManager } from "./notice-banner-manager";
 import { SoundToggle } from "../ui/sound-toggle";
 
 const adminSections = [
@@ -81,6 +85,8 @@ const adminSections = [
     icon: MessagesSquare,
     status: "Ready",
   },
+  { key: "celebrations", title: "Celebrations", description: "Schedule birthday, festival, and custom wishes with animated effects.", icon: PartyPopper, status: "Ready" },
+  { key: "notice", title: "Notice banner", description: "Publish a short announcement and link below the portfolio navigation.", icon: Megaphone, status: "Ready" },
 ] as const;
 
 export function AdminDashboard({ email }: { email: string }) {
@@ -130,6 +136,8 @@ export function AdminDashboard({ email }: { email: string }) {
               "mascot",
               "inbox",
               "resume",
+              "celebrations",
+              "notice",
             ].includes(key);
             const isActive = activeSection === key;
             const cardClass = `w-full rounded-2xl border p-6 text-left shadow-sm transition ${isActive ? "border-[#96b9a8] bg-[#f8fcf8] ring-2 ring-[#2a6355]/10" : "border-[#ded6c7] bg-[#fffdf8]"} ${isReady ? "cursor-pointer hover:border-[#96b9a8]" : "cursor-not-allowed opacity-70"}`;
@@ -168,6 +176,8 @@ export function AdminDashboard({ email }: { email: string }) {
         {activeSection === "mascot" && <MascotDialoguesManager />}
         {activeSection === "inbox" && <ContactInbox />}
         {activeSection === "resume" && <ResumeContentManager />}
+        {activeSection === "celebrations" && <CelebrationsManager />}
+        {activeSection === "notice" && <NoticeBannerManager />}
       </div>
     </main>
   );

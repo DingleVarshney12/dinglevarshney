@@ -6,6 +6,8 @@ import { getProjects } from "../project/project.api";
 import { getSkills } from "../skill/skill.api";
 import { getResumeEntries } from "../resume-content/resume-content.api";
 import type { PublicPortfolioData } from "./portfolio.type";
+import { getActiveCelebration } from "../celebration/celebration.api";
+import { getNoticeBanner } from "../notice-banner/notice-banner.api";
 
 export async function getPublicPortfolioData(): Promise<PublicPortfolioData> {
   const results = await Promise.allSettled([
@@ -16,6 +18,8 @@ export async function getPublicPortfolioData(): Promise<PublicPortfolioData> {
     getAboutChapters(),
     getMascotDialogues(),
     getResumeEntries(),
+    getActiveCelebration(),
+    getNoticeBanner(),
   ]);
 
   const value = <T>(index: number, fallback: T): T => {
@@ -31,9 +35,11 @@ export async function getPublicPortfolioData(): Promise<PublicPortfolioData> {
     "about story",
     "mascot conversation",
     "resume content",
+    "celebration",
+    "notice banner",
   ];
   const failedResources = results.flatMap((result, index) =>
-    result.status === "rejected" ? [resourceNames[index]] : [],
+    result.status === "rejected" && index < 7 ? [resourceNames[index]] : [],
   );
 
   return {
@@ -44,7 +50,9 @@ export async function getPublicPortfolioData(): Promise<PublicPortfolioData> {
     aboutChapters: value(4, []),
     mascotDialogues: value(5, []),
     resumeEntries: value(6, []),
-    apiAvailable: results.slice(1).some((result) => result.status === "fulfilled"),
+    celebration: value(7, null),
+    noticeBanner: value(8, null),
+    apiAvailable: results.slice(1, 7).some((result) => result.status === "fulfilled"),
     failedResources,
   };
 }

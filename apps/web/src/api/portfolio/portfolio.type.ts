@@ -5,6 +5,8 @@ import type { PortfolioProfile } from "../portfolio-profile/portfolio-profile.ty
 import type { Project } from "../project/project.type";
 import type { Skill } from "../skill/skill.type";
 import type { ResumeEntry } from "../resume-content/resume-content.type";
+import type { CelebrationConfig } from "../celebration/celebration.type";
+import type { NoticeBanner } from "../notice-banner/notice-banner.type";
 
 export interface PublicPortfolioData {
   profile: PortfolioProfile | null;
@@ -14,6 +16,8 @@ export interface PublicPortfolioData {
   aboutChapters: AboutChapter[];
   mascotDialogues: MascotDialogue[];
   resumeEntries: ResumeEntry[];
+  celebration: CelebrationConfig | null;
+  noticeBanner: NoticeBanner | null;
   apiAvailable: boolean;
   failedResources: string[];
 }

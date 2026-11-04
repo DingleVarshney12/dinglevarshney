@@ -10,6 +10,8 @@ import { SkillsModule } from "./skills/skills.module.js";
 import { HealthModule } from "./health/health.module.js";
 import { LeetcodeModule } from "./leetcode/leetcode.module.js";
 import { ResumeContentModule } from "./resume-content/resume-content.module.js";
+import { CelebrationsModule } from "./celebrations/celebrations.module.js";
+import { NoticeBannerModule } from "./notice-banner/notice-banner.module.js";
 
 const databaseModules = process.env.DATABASE_URL
   ? [
@@ -22,6 +24,8 @@ const databaseModules = process.env.DATABASE_URL
       MascotDialoguesModule,
       ContactMessagesModule,
       ResumeContentModule,
+      CelebrationsModule,
+      NoticeBannerModule,
     ]
   : [];
 

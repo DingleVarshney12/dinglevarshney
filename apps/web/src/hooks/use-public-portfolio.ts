@@ -12,6 +12,8 @@ const emptyPortfolio: PublicPortfolioData = {
   aboutChapters: [],
   mascotDialogues: [],
   resumeEntries: [],
+  celebration: null,
+  noticeBanner: null,
   apiAvailable: false,
   failedResources: [],
 };

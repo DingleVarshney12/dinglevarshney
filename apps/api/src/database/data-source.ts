@@ -9,6 +9,8 @@ import { PortfolioProfileEntity } from "../profile/entities/portfolio-profile.en
 import { ProjectEntity } from "../projects/entities/project.entity.js";
 import { SkillEntity } from "../skills/entities/skill.entity.js";
 import { ResumeEntryEntity } from "../resume-content/entities/resume-entry.entity.js";
+import { CelebrationEntity } from "../celebrations/entities/celebration.entity.js";
+import { NoticeBannerEntity } from "../notice-banner/notice-banner.entity.js";
 
 if (existsSync(".env")) process.loadEnvFile(".env");
 
@@ -25,6 +27,8 @@ export const AppDataSource = new DataSource({
     MascotDialogueEntity,
     ContactMessageEntity,
     ResumeEntryEntity,
+    CelebrationEntity,
+    NoticeBannerEntity,
   ],
   migrations: ["dist/database/migrations/*.js"],
   migrationsTableName: "typeorm_migrations",

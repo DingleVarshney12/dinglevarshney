@@ -23,7 +23,9 @@ async function request<T>(path: string, init?: RequestInit, accessToken?: string
 
   if (!response.ok) throw await ApiError.fromResponse(response);
   if (response.status === 204) return undefined as T;
-  return (await response.json()) as T;
+  const responseBody = await response.text();
+  if (!responseBody.trim()) return undefined as T;
+  return JSON.parse(responseBody) as T;
 }
 
 export const apiClient = {
