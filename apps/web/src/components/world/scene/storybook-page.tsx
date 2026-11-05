@@ -21,7 +21,7 @@ export function StorybookPage({ page, pageNumber, author, right = false }: Props
         <p className="text-[10px] font-bold uppercase tracking-[0.17em] text-[#82704f]">
           CHAPTER {String(page.chapterNumber).padStart(2, "0")} · ILLUSTRATION
         </p>
-        <figure className="my-3 grid min-h-[240px] flex-1 place-items-center overflow-hidden rounded-sm border border-[#c9b991] bg-[#ece6d5] p-2 sm:min-h-[280px]">
+        <figure className="storybook-image-frame my-3 grid min-h-0 flex-1 place-items-center overflow-hidden rounded-sm border border-[#c9b991] bg-[#ece6d5] p-2">
           {imageFailed ? (
             <figcaption className="px-3 py-4 text-center text-xs text-[#82704f]">
               Illustration could not load. Use a direct, public image URL.

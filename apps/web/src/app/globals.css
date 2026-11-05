@@ -258,7 +258,17 @@ html.portfolio-hide-native-scrollbar body::-webkit-scrollbar {
   box-shadow: inset -10px 0 14px -16px #624b2c;
 }
 .storybook-page-image {
-  min-height: 400px;
+  height: min(68vh, 620px);
+  min-height: 320px;
+  overflow: hidden;
+}
+.storybook-image-frame {
+  min-height: 0;
+  max-height: 100%;
+}
+.storybook-image-frame img {
+  min-height: 0;
+  max-height: 100%;
 }
 .storybook-page:first-child {
   border-radius: 0.45rem 0 0 0.45rem;
@@ -311,7 +321,8 @@ html.portfolio-hide-native-scrollbar body::-webkit-scrollbar {
     padding: 1.25rem;
   }
   .storybook-page-image {
-    min-height: 340px;
+    height: min(65svh, 560px);
+    min-height: 260px;
   }
   .storybook-page-right {
     display: none;
